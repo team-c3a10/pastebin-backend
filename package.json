@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "start:dev": "LOCAL=true ts-node src/server.ts",
     "postinstall": "tsc",
     "format": "prettier --write src",
