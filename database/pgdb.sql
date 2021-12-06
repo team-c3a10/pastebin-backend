@@ -10,6 +10,6 @@ CREATE TABLE pastes(
   paste_id SERIAL PRIMARY KEY,
   title VARCHAR(50),
   paste_body TEXT NOT NULL,
-  createdAt TIMESTAMP NOT NULL DEFAULT NOW(),
+  date TIMESTAMP NOT NULL DEFAULT NOW(),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
