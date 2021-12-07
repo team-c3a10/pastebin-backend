@@ -1,12 +1,33 @@
 import express from "express";
 import cors from "cors";
-// import { Client } from "pg";
+import { Client } from "pg";
 import dotenv from "dotenv";
+
+dotenv.config();
+
+const connectToHeroku = process.env.NODE_ENV === "production";
+
+const config = {
+  connectionString: process.env.DATABASE_URL,
+  ssl: connectToHeroku
+    ? {
+        rejectUnauthorized: false,
+      }
+    : false,
+};
+console.log({ config, connectToHeroku, nodeEnv: process.env.NODE_ENV });
+
+const client = new Client(config);
+
+const databaseConnection = async () => {
+  await client.connect();
+  console.log("Connected to pastes db!");
+};
+databaseConnection();
 
 const app = express();
 app.use(express.json());
 app.use(cors());
-dotenv.config();
 const PORT_NUMBER = process.env.PORT ?? 4000;
 
 interface User {
@@ -22,44 +43,44 @@ interface Paste {
   date: string;
 }
 
-let pastes = [
-  {
-    user_id: 1,
-    paste_id: 1,
-    title: "Bob",
-    paste_body: "banana",
-    date: "06-09-2021",
-  },
-  {
-    user_id: 2,
-    paste_id: 2,
-    title: null,
-    paste_body: "orange",
-    date: "10-05-2021",
-  },
-  {
-    user_id: 1,
-    paste_id: 3,
-    title: "hello",
-    paste_body: "lemon",
-    date: "12-09-2021",
-  },
-];
+// let pastes = [
+//   {
+//     user_id: 1,
+//     paste_id: 1,
+//     title: "Bob",
+//     paste_body: "banana",
+//     date: "06-09-2021",
+//   },
+//   {
+//     user_id: 2,
+//     paste_id: 2,
+//     title: null,
+//     paste_body: "orange",
+//     date: "10-05-2021",
+//   },
+//   {
+//     user_id: 1,
+//     paste_id: 3,
+//     title: "hello",
+//     paste_body: "lemon",
+//     date: "12-09-2021",
+//   },
+// ];
 
-let users = [
-  { id: 1, username: "bob" },
-  { id: 2, username: "lily" },
-];
+// let users = [
+//   { id: 1, username: "bob" },
+//   { id: 2, username: "lily" },
+// ];
 
-// GET /pastes
-app.get("/pastes", async (req, res) => {
-  const allPastes = pastes;
+// // GET /pastes
+// app.get("/pastes", async (req, res) => {
+//   const allPastes = pastes;
 
-  res.status(200).json({
-    status: "success",
-    allPastes,
-  });
-});
+//   res.status(200).json({
+//     status: "success",
+//     allPastes,
+//   });
+// });
 
 // POST /pastes/:user_id
 app.post<{ user_id: string }, {}, Partial<Paste>>(
@@ -75,41 +96,42 @@ app.post<{ user_id: string }, {}, Partial<Paste>>(
           name: "You must provide some paste body for your paste.",
         },
       });
+    } else {
+      const values = [user_id, title, paste_body];
+      const posted = await client.query(
+        "INSERT INTO pastes(user_id, title, paste_body) VALUES($1, $2, $3) RETURNING *",
+        values
+      );
+      res.status(200).json({
+        status: "success",
+        data: {
+          posted,
+        },
+      });
     }
-
-    const newPaste = {
-      user_id: user_id,
-      paste_id: pastes.length + 1,
-      title: title,
-      paste_body: paste_body,
-      date: new Date().toDateString(),
-    };
-    pastes.push(newPaste);
-
-    return res.status(200).json({
-      status: "success",
-      newPaste: newPaste,
-    });
   }
 );
 
 // GET /pastes/user_id
-app.get("/pastes/:user_id", async (req, res) => {
-  const user_id = parseInt(req.params.user_id);
-  const isId = users.filter((user) => user.id === user_id);
+app.get("/pastes/:id", async (req, res) => {
+  const userId = parseInt(req.params.id);
+  const userPastes = await client.query(
+    "SELECT * FROM pastes WHERE user_id = $1",
+    [userId]
+  );
 
-  if (isId.length !== 0) {
-    const pastesByUserId = pastes.filter((paste) => paste.user_id === user_id);
-
+  if (userPastes.rows.length === 1) {
     res.status(200).json({
       status: "success",
-      pastesByUserId,
+      data: {
+        userPastes,
+      },
     });
   } else {
-    res.status(404).json({
+    res.status(400).json({
       status: "fail",
       data: {
-        id: "Could not find a user with that id.",
+        id: "Could not find a paste with that id identifier",
       },
     });
   }
@@ -118,25 +140,26 @@ app.get("/pastes/:user_id", async (req, res) => {
 // GET /users/username
 app.get("/users/:username", async (req, res) => {
   const username = req.params.username;
-  const isUsername = users.filter((user) => user.username === username);
+  const checkUsers = await client.query(
+    "SELECT username FROM users WHERE username = $1",
+    [username]
+  );
 
-  if (isUsername.length !== 0) {
-    const userByUsername: User[] = users.filter(
-      (user) => user.username === username
-    );
+  if (checkUsers.rows.length === 1) {
     res.status(200).json({
       status: "success",
-      user: userByUsername[0],
+      message: "logged user in",
+      user: checkUsers.rows[0],
     });
   } else {
-    users.push({ id: users.length + 1, username: username });
-    const userByUsername: User[] = users.filter(
-      (user) => user.username === username
+    const signUp = await client.query(
+      "INSERT INTO users (username) VALUES($1) RETURNING *",
+      [username]
     );
     res.status(200).json({
       status: "success",
       message: "new user added",
-      newUser: userByUsername[0],
+      user: signUp.rows[0],
     });
   }
 });
