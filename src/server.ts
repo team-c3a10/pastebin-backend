@@ -43,45 +43,6 @@ interface Paste {
   date: string;
 }
 
-// let pastes = [
-//   {
-//     user_id: 1,
-//     paste_id: 1,
-//     title: "Bob",
-//     paste_body: "banana",
-//     date: "06-09-2021",
-//   },
-//   {
-//     user_id: 2,
-//     paste_id: 2,
-//     title: null,
-//     paste_body: "orange",
-//     date: "10-05-2021",
-//   },
-//   {
-//     user_id: 1,
-//     paste_id: 3,
-//     title: "hello",
-//     paste_body: "lemon",
-//     date: "12-09-2021",
-//   },
-// ];
-
-// let users = [
-//   { id: 1, username: "bob" },
-//   { id: 2, username: "lily" },
-// ];
-
-// // GET /pastes
-// app.get("/pastes", async (req, res) => {
-//   const allPastes = pastes;
-
-//   res.status(200).json({
-//     status: "success",
-//     allPastes,
-//   });
-// });
-
 // POST /pastes/:user_id
 app.post<{ user_id: string }, {}, Partial<Paste>>(
   "/pastes/:user_id",
@@ -128,7 +89,7 @@ app.get("/pastes", async (req, res) => {
 app.get("/pastes/:id", async (req, res) => {
   const userId = parseInt(req.params.id);
   const getUserPastes = await client.query(
-    "SELECT * FROM pastes WHERE user_id = $1",
+    "SELECT * FROM pastes WHERE user_id = $1 ORDER BY date DESC LIMIT 10",
     [userId]
   );
 
