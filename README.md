@@ -1,4 +1,6 @@
 # mark-fullstack-proj--starter-1
+notion page: https://www.notion.so/weareacademy/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d
+deployed backend: https://pastebin-backend-c3a10.herokuapp.com/
 
 ## Usage:
 
