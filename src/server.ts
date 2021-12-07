@@ -112,15 +112,28 @@ app.post<{ user_id: string }, {}, Partial<Paste>>(
   }
 );
 
+// GET /pastes
+app.get("/pastes", async (req, res) => {
+  const getAllPastes = await client.query("SELECT * FROM pastes");
+  const userPastes = getAllPastes.rows;
+  res.status(200).json({
+    status: "success",
+    data: {
+      userPastes,
+    },
+  });
+});
+
 // GET /pastes/user_id
 app.get("/pastes/:id", async (req, res) => {
   const userId = parseInt(req.params.id);
-  const userPastes = await client.query(
+  const getUserPastes = await client.query(
     "SELECT * FROM pastes WHERE user_id = $1",
     [userId]
   );
 
-  if (userPastes.rows.length === 1) {
+  if (getUserPastes.rows.length === 1) {
+    const userPastes = getUserPastes.rows;
     res.status(200).json({
       status: "success",
       data: {
@@ -141,7 +154,7 @@ app.get("/pastes/:id", async (req, res) => {
 app.get("/users/:username", async (req, res) => {
   const username = req.params.username;
   const checkUsers = await client.query(
-    "SELECT username FROM users WHERE username = $1",
+    "SELECT * FROM users WHERE username = $1",
     [username]
   );
 
