@@ -93,7 +93,7 @@ app.get("/pastes/:id", async (req, res) => {
     [userId]
   );
 
-  if (getUserPastes.rows.length === 1) {
+  if (getUserPastes.rows.length >= 1) {
     const userPastes = getUserPastes.rows;
     res.status(200).json({
       status: "success",
