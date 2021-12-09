@@ -1,5 +1,6 @@
 ## Install
 
+- clone and open this repo
 - `yarn` to install dependencies
 
 ## DB Setup
