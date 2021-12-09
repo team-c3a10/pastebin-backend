@@ -1,25 +1,15 @@
-# mark-fullstack-proj--starter-1
-notion page: https://www.notion.so/weareacademy/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d
-deployed backend: https://pastebin-backend-c3a10.herokuapp.com/
-
-## Usage:
-
-Instead of cloning this project, click "Use this template".  This will allow you to create a repo on github which has this project's content but which is not a fork of it.
-
-Make sure you create the repo as being owned by your own account not by the WeAreAcademy organisation.
-
-
 ## Install
 
-`yarn`
+- `yarn` to install dependencies
 
 ## DB Setup
 
-Copy .env.example to .env and set `DATABASE_URL` and `PORT` to your liking.
+Copy .env.example to .env and set `DATABASE_URL` to your db, e.g. for local database: `DATABASE_URL=postgres://neill@localhost/pastebin`.
 
-Example for a local database: `DATABASE_URL=postgres://neill@localhost/pastebin`
+Set `PORT` to your liking.
 
-You will need to create your own databases for this project - one locally and one on Heroku.
+You will need to create your own databases for this project - one locally and one on Heroku. 
+Run the SQL query found in [database/create_tables.sql](database/create_tables.sql) to populate the database with the required tables.
 
 ## Running locally
 
@@ -30,3 +20,17 @@ This will set the env var LOCAL to true, which will cause the db connection conf
 ## running on heroku
 
 When the project is deployed to heroku, the command in your `Procfile` file will be run.
+
+## Project documentation
+- Read the documentation used to develop this site on our [Notion](https://www.notion.so/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d) page.
+- See a [live version](https://pastebin-backend-c3a10.herokuapp.com/) of this server hosted on Heroku.
+
+# mark-fullstack-proj--starter-1
+notion page: https://www.notion.so/weareacademy/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d
+deployed backend: https://pastebin-backend-c3a10.herokuapp.com/
+
+## Usage:
+
+Instead of cloning this project, click "Use this template".  This will allow you to create a repo on github which has this project's content but which is not a fork of it.
+
+Make sure you create the repo as being owned by your own account not by the WeAreAcademy organisation.
