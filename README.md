@@ -24,13 +24,3 @@ When the project is deployed to heroku, the command in your `Procfile` file will
 ## Project documentation
 - Read the documentation used to develop this site on our [Notion](https://www.notion.so/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d) page.
 - See a [live version](https://pastebin-backend-c3a10.herokuapp.com/) of this server hosted on Heroku.
-
-# mark-fullstack-proj--starter-1
-notion page: https://www.notion.so/weareacademy/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d
-deployed backend: https://pastebin-backend-c3a10.herokuapp.com/
-
-## Usage:
-
-Instead of cloning this project, click "Use this template".  This will allow you to create a repo on github which has this project's content but which is not a fork of it.
-
-Make sure you create the repo as being owned by your own account not by the WeAreAcademy organisation.
