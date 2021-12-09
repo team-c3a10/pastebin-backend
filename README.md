@@ -23,5 +23,5 @@ This will set the env var LOCAL to true, which will cause the db connection conf
 When the project is deployed to heroku, the command in your `Procfile` file will be run.
 
 ## Project documentation
-- Read the documentation used to develop this site on our [Notion](https://www.notion.so/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d) page.
+- Read the documentation used to develop this repository on our [Notion](https://www.notion.so/Team-C3A10-Project-1-df68fea074484e48a3b28f22dd06236d) page.
 - See a [live version](https://pastebin-backend-c3a10.herokuapp.com/) of this server hosted on Heroku.
